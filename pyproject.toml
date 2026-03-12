@@ -1,0 +1,15 @@
+[project]
+name = "simple-tg-bot"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.12"
+dependencies = [
+    "aiogram>=3.26.0",
+    "black>=26.1.0",
+    "logfire>=4.26.0",
+    "loguru>=0.7.3",
+    "mistralai>=1.12.4",
+    "pydantic-ai>=1.66.0",
+    "pydantic-settings>=2.13.1",
+    "redis>=7.3.0",
+]
