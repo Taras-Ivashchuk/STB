@@ -21,6 +21,7 @@ class MenuRouter:
                 " - sending formatted text\n"
                 " - sending photos and documents\n"
                 " - sending answers from AI Agent\n"
+                " - working with AI Agent in RAG Mode\n"
             )
 
             await message.answer(text, parse_mode="HTML")
@@ -46,7 +47,12 @@ class MenuRouter:
                 "/guide"
                 " - get the guide.txt\n"
                 "/promo"
-                " - get a today's promo for evening"
+                " - get a today's promo for evening\n"
+                "/toggle_rag"
+                " - turn on or off RAG AI Mode\n"
+                "/rag_status"
+                " - check current RAG AI Mode status\n"
+
             )
 
             await message.answer(text, parse_mode="HTML")

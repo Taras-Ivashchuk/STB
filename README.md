@@ -15,6 +15,8 @@ A simple Telegram bot demonstrtes core features which is powered by the aiogram 
  - /send_photo - send nice picture of black kitty
  - /promo - get your discount for evening
  - /start - say hello to bot
+ - /toggle_rag - toggle RAG AI Mode
+ - /rag_status - check RAG AI Mode status
  - or ask whatever you like, and STB will ask Mistral LLM for you:)
 
 
