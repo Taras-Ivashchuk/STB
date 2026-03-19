@@ -11,7 +11,7 @@ from agent.pydantic_agent import PydanticAgent
 from repositories.interfaces import RepositoryInterface
 from redis.asyncio import Redis
 
-from repositories.pydantic_ai_repository import RedisRepository
+from repositories.redis_repository import RedisRepository
 from routers.text_router import TextRouter
 from services.chat_service import ChatService
 from services.interfaces import ServiceInterface
