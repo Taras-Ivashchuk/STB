@@ -18,6 +18,6 @@ class ChatService:
         logger.debug(agent_response.history.decode("utf-8"))
 
         # store the serialized history in repository
-        await self._repository.save(user_id=user_id, history=agent_response.history)
+        await self._repository.save(user_id=user_id, item=agent_response.history)
 
         return agent_response.response
