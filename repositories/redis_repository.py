@@ -3,14 +3,15 @@ from redis.asyncio import Redis
 
 
 class RedisRepository:
-    def __init__(self, redis_client: Redis):
+    def __init__(self, redis_client: Redis, prefix: str):
         self._connection = redis_client
+        self._prefix = prefix
 
-    async def save(self, user_id: int, history: Any) -> None:
-        await self._connection.set(str(user_id), history)
+    async def save(self, user_id: int, item: Any) -> None:
+        await self._connection.set(f"{self._prefix}:{str(user_id)}", item)
 
     async def load(self, user_id: int):
-        return await self._connection.get(str(user_id))
+        return await self._connection.get(f"{self._prefix}:{str(user_id)}")
 
     async def close(self) -> None:
         await self._connection.aclose()

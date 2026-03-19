@@ -16,6 +16,7 @@ from routers.text_router import TextRouter
 from services.chat_service import ChatService
 from services.interfaces import ServiceInterface
 from core.settings import settings
+from typing import Any
 
 
 def get_model() -> Model:
@@ -32,10 +33,12 @@ def get_agent(model: Model) -> AgentInterface:
     return PydanticAgent(llm_model=model)
 
 
-def get_repository() -> RepositoryInterface:
-    redis_client = Redis(host=settings.DB_HOST, port=settings.DB_PORT)
+def get_db_client() -> Any:
+    return Redis(host=settings.DB_HOST, port=settings.DB_PORT)
 
-    return RedisRepository(redis_client=redis_client)
+
+def get_repository(db_client: Any, db_prefix: str) -> RepositoryInterface:
+    return RedisRepository(redis_client=db_client, prefix=db_prefix)
 
 
 def get_service(
