@@ -12,11 +12,14 @@ from repositories.interfaces import RepositoryInterface
 from redis.asyncio import Redis
 
 from repositories.redis_repository import RedisRepository
+from routers.menu_router import MenuRouter
 from routers.text_router import TextRouter
 from services.chat_service import ChatService
-from services.interfaces import ServiceInterface
+from services.interfaces import ServiceInterface, RagServiceInterface
 from core.settings import settings
 from typing import Any
+
+from services.rag_service import RagService
 
 
 def get_model() -> Model:
@@ -47,6 +50,10 @@ def get_service(
     return ChatService(agent=agent, repository=repository)
 
 
+def get_rag_service(settings_repository: RepositoryInterface) -> RagServiceInterface:
+    return RagService(settings_repository=settings_repository)
+
+
 def get_bot() -> Bot:
     bot = Bot(
         token=settings.BOT_TOKEN,
@@ -71,3 +78,7 @@ def get_dispatcher(
 
 def get_text_router(service: ServiceInterface) -> Router:
     return TextRouter(service=service).get_router()
+
+
+def get_menu_router(service: RagServiceInterface) -> Router:
+    return MenuRouter(service=service).get_router()

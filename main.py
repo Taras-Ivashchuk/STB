@@ -9,18 +9,25 @@ from factory import (
     get_dispatcher,
     get_text_router,
     get_db_client,
+    get_menu_router, get_rag_service,
 )
 from routers.media_handlers import router as media_router
-from routers.menu_handlers import router as menu_router
 
 
 async def main() -> None:
     mistral_model = get_model()
     pydantic_agent = get_agent(mistral_model)
+
     db_client = get_db_client()
+
     user_history_repository = get_repository(db_client, db_prefix="history")
+    user_settings_repository = get_repository(db_client, db_prefix="settings")
+
     chat_service = get_service(agent=pydantic_agent, repository=user_history_repository)
+    rag_service = get_rag_service(settings_repository=user_settings_repository)
+
     basic_router = get_text_router(chat_service)
+    menu_router = get_menu_router(rag_service)
     routers = [menu_router, basic_router, media_router]
 
     dispatcher = get_dispatcher(routers, user_history_repository)
