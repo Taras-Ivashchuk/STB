@@ -1,7 +1,6 @@
 from pydantic import BaseModel
-from pathlib import Path
 
 
 class PdfResult(BaseModel):
-    file_path: Path
+    file_name: str
     sentences: list[str]
