@@ -6,6 +6,7 @@ requires-python = ">=3.12"
 dependencies = [
     "aiogram>=3.26.0",
     "black>=26.1.0",
+    "chromadb>=1.5.5",
     "logfire>=4.26.0",
     "loguru>=0.7.3",
     "mistralai>=1.12.4",
