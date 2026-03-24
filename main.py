@@ -9,9 +9,10 @@ from factory import (
     get_dispatcher,
     get_text_router,
     get_db_client,
-    get_menu_router, get_rag_service,
+    get_menu_router,
+    get_rag_service,
+    get_media_router
 )
-from routers.media_handlers import router as media_router
 
 
 async def main() -> None:
@@ -23,11 +24,18 @@ async def main() -> None:
     user_history_repository = get_repository(db_client, db_prefix="history")
     user_settings_repository = get_repository(db_client, db_prefix="settings")
 
-    chat_service = get_service(agent=pydantic_agent, repository=user_history_repository)
     rag_service = get_rag_service(settings_repository=user_settings_repository)
+
+    chat_service = get_service(
+        agent=pydantic_agent,
+        repository=user_history_repository,
+        rag_service=rag_service
+    )
 
     basic_router = get_text_router(chat_service)
     menu_router = get_menu_router(rag_service)
+    media_router = get_media_router(rag_service)
+
     routers = [menu_router, basic_router, media_router]
 
     dispatcher = get_dispatcher(routers, user_history_repository)
