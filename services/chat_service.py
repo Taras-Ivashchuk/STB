@@ -1,23 +1,44 @@
-from typing import Any
+from typing import Optional
 
 from agent.interfaces import AgentInterface
 from app_logger import logger
+from models.agent import AgentResponse
 from repositories.interfaces import RepositoryInterface
+from services.interfaces import RagServiceInterface
 
 
 class ChatService:
-    def __init__(self, agent: AgentInterface, repository: RepositoryInterface) -> None:
+    def __init__(
+        self,
+        agent: AgentInterface,
+        repository: RepositoryInterface,
+        rag_service: RagServiceInterface
+    ) -> None:
         self._agent = agent
         self._repository = repository
+        self._rag_service = rag_service
 
-    async def handle(self, user_id: int, msg: str) -> str:
-        user_history = await self._repository.load(user_id=user_id)
+    async def handle(self, user_id: int, msg: str, n_results: Optional[int] = 10) -> AgentResponse:
+        is_rag = await self._rag_service.get_status(user_id=user_id)
 
-        # agent deserializes the user history and returns a serialized response
-        agent_response = await self._agent.ask(question=msg, history=user_history)
-        logger.debug(agent_response.history.decode("utf-8"))
+        if not is_rag:
+            prompt = (
+                "- Your task is to provide answers using user queries and message history\n"
+                "- Be creative while answering the queries\n"
+                "- If history is empty use only instructions provided\n"
+                "- Consider the history as a part of the instructions provided\n"
+                "- Use agent response model for responses\n"
+            )
 
-        # store the serialized history in repository
-        await self._repository.save(user_id=user_id, item=agent_response.history)
+            user_history = await self._repository.load(user_id=user_id)
 
-        return agent_response.response
+            # agent deserializes the user history and returns a serialized response
+            agent_response = await self._agent.ask(question=msg, history=user_history, instructions=prompt)
+            logger.debug(agent_response.history.decode("utf-8"))
+
+            # store the serialized history in repository
+            await self._repository.save(user_id=user_id, item=agent_response.history)
+            return agent_response
+        else:
+            agent_response = await self._rag_service.query(user_id=user_id, question=msg, n_results=n_results)
+            return agent_response
