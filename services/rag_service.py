@@ -81,7 +81,7 @@ class RagService:
         for i, (document, metadata) in enumerate(zip(documents, metadatas), 1):
             filename = metadata.get("filename", "unknown")
             chunk = metadata.get("chunk_index", "unknown")
-            ctx_part = f"[Document #: {i}, Source: {document}, Filename: {filename}, Chunk: {chunk}]\n{document}\n"  # todo
+            ctx_part = f"[Document #: {i}, Source: {document}, Filename: {filename}, Chunk: {chunk}]\n{document}\n"
             ctx_parts.append(ctx_part)
 
         return "\n".join(ctx_parts)
