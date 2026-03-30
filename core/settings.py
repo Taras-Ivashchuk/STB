@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     DB_PORT: int
     MEDIA_DIR: Path = BASE_DIR / "media"
     LOG_DIR: Path = BASE_DIR / "logs"
+    VECTOR_DB_COLLECTION_NAME: str
 
 
 settings = Settings()  # noqa
