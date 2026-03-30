@@ -27,10 +27,10 @@ class TextRouter:
             try:
                 if not message.text:
                     return
-                response = await self._service.handle(
+                agent_response = await self._service.handle(
                     user_id=message.from_user.id, msg=message.text
                 )
-                await message.answer(response)
+                await message.answer(agent_response.response)
             except TypeError:
                 await message.answer("Nice try!")
 
