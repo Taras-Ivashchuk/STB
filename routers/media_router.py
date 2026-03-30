@@ -27,11 +27,16 @@ class MediaRouter:
 
         @self._router.message(F.document.mime_type.endswith("pdf"))
         async def pdf_handler(message: Message) -> None:
-            rag_status = await self._rag_service.get_status(user_id=message.from_user.id)
+            user_id = message.from_user.id
+            rag_status = await self._rag_service.get_status(user_id=user_id)
+            file = message.document
+            filename = file.file_name
             if rag_status:
-                bin_file = await message.bot.download(file=message.document, destination=io.BytesIO())
-                # await self._rag_service.upload_pdf(bin_file)
-                await message.answer("Rag is On! Your document is uploaded to vector database")
+                bin_file = io.BytesIO()
+                bin_file = await message.bot.download(file=file, destination=bin_file)
+                await message.answer("📄 Uploading your document, please wait...")
+                await self._rag_service.upload_pdf(user_id=user_id, filename=filename, pdf_file=bin_file)
+                await message.answer("📄 Your document is uploaded to vector database")
 
             else:
                 await message.answer("Rag is Off! Nice document")
