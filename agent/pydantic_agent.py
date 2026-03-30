@@ -22,8 +22,9 @@ class PydanticAgent:
     async def ask(self, question: str, *args, **kwargs) -> AgentResponse:
         history_as_json = kwargs.get("history")
         history = self._deserialize(history_as_json)
+        instructions = kwargs.get("instructions", "")
 
-        result = await self._agent.run(question, message_history=history)
+        result = await self._agent.run(question, message_history=history, instructions=instructions)
 
         return AgentResponse(
             response=result.output, history=self._serialize(result.all_messages())
