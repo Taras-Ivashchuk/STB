@@ -1,4 +1,4 @@
-from typing import Protocol, Any, Optional
+from typing import Protocol, Any, Dict
 
 from dtos import PdfResult
 
@@ -18,7 +18,12 @@ class VectorDbInterface(Protocol):
     async def add_documents(self, user_id: int, pdf_result: PdfResult) -> None:
         """Add documents to vector database"""
 
-    async def search_documents(self, user_id: int, pdf_result: PdfResult) -> Optional[list[list[str]]]:
+    async def search(
+        self,
+        user_id: int,
+        question: str,
+        n_results: int = 10
+    ) -> Dict[Any, Any]:
         """Search documents in vector db using vector similarity"""
 
     async def delete_by_filename(self, user_id: int, filename: str) -> None:

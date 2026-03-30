@@ -1,4 +1,7 @@
-from chromadb import AsyncClientAPI
+from chromadb import (
+    AsyncClientAPI,
+    QueryResult
+)
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
 from dtos import PdfResult
@@ -19,7 +22,7 @@ class ChromaRepository:
         metadatas = []
 
         for i, sentence in enumerate(pdf_result.sentences):
-            ids.append(f"{sentence} - {i}")
+            ids.append(f"{pdf_result.file_name} - {i}")
             metadatas.append(
                 {
                     "user_id": user_id,
@@ -30,21 +33,19 @@ class ChromaRepository:
 
         await self._collection.add(ids=ids, documents=pdf_result.sentences, metadatas=metadatas)
 
-    async def search_documents(
+    async def search(
         self,
         user_id: int,
-        pdf_result: PdfResult,
+        question: str,
         n_results: int = 10
-    ) -> list[list[str]]:
+    ) -> QueryResult:
         result = await self._collection.query(
-            query_texts=pdf_result.sentences,
+            query_texts=[question],
             n_results=n_results,
             where={"user_id": user_id}
         )
 
-        if not result["documents"]:
-            return []
-        return result["documents"]
+        return result
 
     async def delete_by_filename(self, user_id: int, filename: str) -> None:
         await self._collection.delete(where={"user_id": user_id, "filename": filename})
