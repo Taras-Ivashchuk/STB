@@ -13,7 +13,7 @@ from factory import (
     get_rag_service,
     get_media_router,
     get_vector_db_client,
-    get_vector_db_collection, get_vector_repository
+    get_vector_db_collection, get_vector_repository, get_rag_router
 )
 
 
@@ -44,7 +44,8 @@ async def main() -> None:
     )
 
     basic_router = get_text_router(chat_service)
-    menu_router = get_menu_router(rag_service)
+    rag_router = get_rag_router(rag_service)
+    menu_router = get_menu_router(rag_router)
     media_router = get_media_router(rag_service)
 
     routers = [menu_router, basic_router, media_router]

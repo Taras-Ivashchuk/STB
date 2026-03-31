@@ -3,14 +3,13 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.types import FSInputFile
 from core import settings
-from services.interfaces import RagServiceInterface
 
 
 class MenuRouter:
-    def __init__(self, rag_service: RagServiceInterface) -> None:
+    def __init__(self, rag_router: Router) -> None:
         self._router = Router(name="menu_router")
-        self._rag_service = rag_service
         self._register_services()
+        self._router.include_router(rag_router)
 
     def _register_services(self) -> None:
         @self._router.message(Command("menu"))
@@ -78,33 +77,6 @@ class MenuRouter:
 
             await message.answer_document(discount, parse_mode="HTML")
             await message.answer(text, parse_mode="HTML")
-
-        @self._router.message(Command("toggle_rag"))
-        async def toggle_rag_mode(message: Message):
-            args = message.text.split()
-            if len(args) < 2:
-                await message.answer("Incorrect values. Usage: /toggle_rag on[off]")
-                return
-            text = args[1].lower()
-            if text == "on":
-                set_value = True
-            elif text == "off":
-                set_value = False
-            else:
-                await message.answer("Incorrect values. Usage: /toggle_rag on[off]")
-                return
-
-            result = await self._rag_service.toggle(user_id=message.from_user.id, value=set_value)
-            response = "RAG mode enabled" if result else "RAG mode disabled"
-
-            await message.answer(response)
-
-        @self._router.message(Command("rag_status"))
-        async def get_rag_status(message: Message):
-            value = await self._rag_service.get_status(user_id=message.from_user.id)
-
-            response = "RAG is enabled" if value else "RAG mode disabled"
-            await message.answer(response)
 
     def get_router(self) -> Router:
         return self._router
