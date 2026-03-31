@@ -17,6 +17,7 @@ A simple Telegram bot demonstrtes core features which is powered by the aiogram 
  - /start - say hello to bot
  - /rag_toggle - toggle RAG AI Mode
  - /rag_status - check RAG AI Mode status
+ - /rag_docs - list user documents uploaded for RAG AI Mode
  - or ask whatever you like, and STB will ask Mistral LLM for you:)
 
 

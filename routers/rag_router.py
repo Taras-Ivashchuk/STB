@@ -38,5 +38,19 @@ class RagRouter:
             response = "RAG is enabled" if value else "RAG mode disabled"
             await message.answer(response)
 
+        @self._router.message(Command("rag_docs"))
+        async def get_rag_docs_uploaded(message: Message):
+            rag_status = await self._rag_service.get_status(user_id=message.from_user.id)
+            if not rag_status:
+                await message.answer("RAG mode disabled")
+                return
+            user_id = message.from_user.id
+            filenames = await self._rag_service.get_all_filenames(user_id=user_id)
+            total_documents = await self._rag_service.count_documents(user_id=user_id)
+            response = f"Total files: {len(filenames)}, total documents {total_documents}\n" + "\n".join(
+                f"{i}. {filename}" for i, filename in enumerate(filenames, 1)
+            )
+            await message.answer(response)
+
     def get_router(self) -> Router:
         return self._router

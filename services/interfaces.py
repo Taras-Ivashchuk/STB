@@ -24,3 +24,9 @@ class RagServiceInterface(Protocol):
 
     async def query(self, user_id: int, question: str, n_results: int = 10) -> AgentResponse:
         """Query the AI agent using RAG"""
+
+    async def get_all_filenames(self, user_id: int) -> list[str]:
+        """Get all filenames of documents that were uploaded by user"""
+
+    async def count_documents(self, user_id: int) -> int:
+        """Count the documents that were uploaded by user"""

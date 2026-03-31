@@ -85,3 +85,9 @@ class RagService:
             ctx_parts.append(ctx_part)
 
         return "\n".join(ctx_parts)
+
+    async def get_all_filenames(self, user_id: int) -> list[str]:
+        return await self._vector_repository.get_all_filenames(user_id=user_id)
+
+    async def count_documents(self, user_id: int) -> int:
+        return await self._vector_repository.count_documents(user_id=user_id)

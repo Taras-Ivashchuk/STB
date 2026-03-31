@@ -51,7 +51,7 @@ class ChromaRepository:
         await self._collection.delete(where={"user_id": user_id, "filename": filename})
 
     async def get_all_filenames(self, user_id: int) -> list[str]:
-        result = await self._collection.query(where={"user_id": user_id})
+        result = await self._collection.get(where={"user_id": user_id}, include=["metadatas"])
         filenames = set()
 
         for file_metadata in result.get("metadatas", []):
@@ -64,4 +64,4 @@ class ChromaRepository:
     async def count_documents(self, user_id: int) -> int:
         result = await self._collection.get(where={"user_id": user_id})
 
-        return len(result["documents"])
+        return len(result.get("documents", []))
