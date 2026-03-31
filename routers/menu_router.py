@@ -7,9 +7,9 @@ from services.interfaces import RagServiceInterface
 
 
 class MenuRouter:
-    def __init__(self, service: RagServiceInterface) -> None:
+    def __init__(self, rag_service: RagServiceInterface) -> None:
         self._router = Router(name="menu_router")
-        self._service = service
+        self._rag_service = rag_service
         self._register_services()
 
     def _register_services(self) -> None:
@@ -94,14 +94,14 @@ class MenuRouter:
                 await message.answer("Incorrect values. Usage: /toggle_rag on[off]")
                 return
 
-            result = await self._service.toggle(user_id=message.from_user.id, value=set_value)
+            result = await self._rag_service.toggle(user_id=message.from_user.id, value=set_value)
             response = "RAG mode enabled" if result else "RAG mode disabled"
 
             await message.answer(response)
 
         @self._router.message(Command("rag_status"))
         async def get_rag_status(message: Message):
-            value = await self._service.get_status(user_id=message.from_user.id)
+            value = await self._rag_service.get_status(user_id=message.from_user.id)
 
             response = "RAG is enabled" if value else "RAG mode disabled"
             await message.answer(response)
