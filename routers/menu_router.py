@@ -53,6 +53,8 @@ class MenuRouter:
                 " - check current RAG AI Mode status\n"
                 "/rag_docs"
                 " - list user documents uploaded for RAG AI Mode\n"
+                "/rag_doc_delete filename"
+                " - delete document from RAG AI Mode\n"
 
             )
 

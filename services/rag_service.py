@@ -1,4 +1,5 @@
 from agent.interfaces import AgentInterface
+from exceptions import DocumentNotFoundError
 from models.agent import AgentResponse
 from repositories.interfaces import RepositoryInterface, VectorDbInterface
 import json
@@ -63,7 +64,7 @@ class RagService:
                   "- Be strict and not creative\n"
                   "- Consider the history as a part of the context provided\n"
                   "- Use agent response model for responses\n"
-                  
+
                   f"- Here is the context: {context}"
                   )
 
@@ -91,3 +92,9 @@ class RagService:
 
     async def count_documents(self, user_id: int) -> int:
         return await self._vector_repository.count_documents(user_id=user_id)
+
+    async def delete_by_filename(self, user_id: int, filename: str) -> None:
+        try:
+            await self._vector_repository.delete_by_filename(user_id=user_id, filename=filename)
+        except DocumentNotFoundError:
+            raise

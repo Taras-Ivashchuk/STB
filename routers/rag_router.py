@@ -1,4 +1,6 @@
 from aiogram import Router
+
+from exceptions import DocumentNotFoundError
 from services.interfaces import RagServiceInterface
 from aiogram.filters import Command
 from aiogram.types import Message
@@ -51,6 +53,24 @@ class RagRouter:
                 f"{i}. {filename}" for i, filename in enumerate(filenames, 1)
             )
             await message.answer(response)
+
+        @self._router.message(Command("rag_doc_delete"))
+        async def delete_doc_from_rag(message: Message):
+            args = message.text.split()
+            if len(args) < 2:
+                await message.answer("Usage: /rag_delete_doc filename")
+                return
+
+            filename = args[1]
+            user_id = message.from_user.id
+
+            try:
+                await self._rag_service.delete_by_filename(user_id=user_id, filename=filename)
+            except DocumentNotFoundError:
+                await message.answer(f"Error! File [{filename}] not found. Check the filename")
+                return
+
+            await message.answer(f"File [{filename}] successfuly deleted!")
 
     def get_router(self) -> Router:
         return self._router

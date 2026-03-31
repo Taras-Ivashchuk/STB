@@ -30,3 +30,6 @@ class RagServiceInterface(Protocol):
 
     async def count_documents(self, user_id: int) -> int:
         """Count the documents that were uploaded by user"""
+
+    async def delete_by_filename(self, user_id: int, filename: str) -> None:
+        """Delete the document from vector database by document filename"""

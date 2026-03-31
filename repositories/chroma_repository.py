@@ -5,6 +5,7 @@ from chromadb import (
 from chromadb.api.models.AsyncCollection import AsyncCollection
 
 from dtos import PdfResult
+from exceptions import DocumentNotFoundError
 
 
 class ChromaRepository:
@@ -48,7 +49,18 @@ class ChromaRepository:
         return result
 
     async def delete_by_filename(self, user_id: int, filename: str) -> None:
-        await self._collection.delete(where={"user_id": user_id, "filename": filename})
+        doc = await self._collection.get(
+            where={
+                "$and": [
+                    {"user_id": user_id},
+                    {"filename": filename}
+                ]
+            }
+        )
+        if not doc.get("ids"):
+            raise DocumentNotFoundError(f"Document {filename} not found")
+
+        await self._collection.delete(ids=doc["ids"])
 
     async def get_all_filenames(self, user_id: int) -> list[str]:
         result = await self._collection.get(where={"user_id": user_id}, include=["metadatas"])
