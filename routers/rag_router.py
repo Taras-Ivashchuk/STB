@@ -11,11 +11,11 @@ class RagRouter:
         self._register_services()
 
     def _register_services(self) -> None:
-        @self._router.message(Command("toggle_rag"))
+        @self._router.message(Command("rag_toggle"))
         async def toggle_rag_mode(message: Message):
             args = message.text.split()
             if len(args) < 2:
-                await message.answer("Incorrect values. Usage: /toggle_rag on[off]")
+                await message.answer("Incorrect values. Usage: /rag_toggle on[off]")
                 return
             text = args[1].lower()
             if text == "on":
@@ -23,7 +23,7 @@ class RagRouter:
             elif text == "off":
                 set_value = False
             else:
-                await message.answer("Incorrect values. Usage: /toggle_rag on[off]")
+                await message.answer("Incorrect values. Usage: /rag_toggle on[off]")
                 return
 
             result = await self._rag_service.toggle(user_id=message.from_user.id, value=set_value)

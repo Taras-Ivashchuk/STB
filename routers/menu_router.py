@@ -47,7 +47,7 @@ class MenuRouter:
                 " - get the guide.txt\n"
                 "/promo"
                 " - get a today's promo for evening\n"
-                "/toggle_rag"
+                "/rag_toggle on/off"
                 " - turn on or off RAG AI Mode\n"
                 "/rag_status"
                 " - check current RAG AI Mode status\n"
