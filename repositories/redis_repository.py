@@ -15,3 +15,6 @@ class RedisRepository:
 
     async def close(self) -> None:
         await self._connection.aclose()
+
+    async def delete(self, user_id: int) -> None:
+        await self._connection.delete(f"{self._prefix}:{str(user_id)}")

@@ -42,3 +42,8 @@ class ChatService:
         else:
             agent_response = await self._rag_service.query(user_id=user_id, question=msg, n_results=n_results)
             return agent_response
+
+    async def reset(self, user_id: int) -> None:
+        await self._repository.delete(user_id=user_id)
+        await self._rag_service.delete_all(user_id=user_id)
+        await self._rag_service.toggle(user_id=user_id, value=False)

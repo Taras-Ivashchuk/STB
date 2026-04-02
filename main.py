@@ -45,7 +45,7 @@ async def main() -> None:
 
     basic_router = get_text_router(chat_service)
     rag_router = get_rag_router(rag_service)
-    menu_router = get_menu_router(rag_router)
+    menu_router = get_menu_router(rag_router, chat_service=chat_service)
     media_router = get_media_router(rag_service)
 
     routers = [menu_router, basic_router, media_router]

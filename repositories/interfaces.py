@@ -13,6 +13,8 @@ class RepositoryInterface(Protocol):
     async def close(self) -> None:
         """Close the connection"""
 
+    async def delete(self, user_id: int) -> None:
+        """Delete all records"""
 
 class VectorDbInterface(Protocol):
     async def add_documents(self, user_id: int, pdf_result: PdfResult) -> None:
@@ -34,3 +36,6 @@ class VectorDbInterface(Protocol):
 
     async def count_documents(self, user_id: int) -> int:
         """Count all documents in vector database"""
+
+    async def delete_all_documents(self, user_id: int) -> None:
+        """Delete user settings, history, and uploaded files"""

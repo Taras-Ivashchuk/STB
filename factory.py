@@ -110,8 +110,8 @@ def get_text_router(service: ServiceInterface) -> Router:
     return TextRouter(service=service).get_router()
 
 
-def get_menu_router(rag_router: Router) -> Router:
-    return MenuRouter(rag_router=rag_router).get_router()
+def get_menu_router(rag_router: Router, chat_service: ServiceInterface) -> Router:
+    return MenuRouter(rag_router=rag_router, chat_service=chat_service).get_router()
 
 
 def get_rag_router(rag_service: RagServiceInterface) -> Router:

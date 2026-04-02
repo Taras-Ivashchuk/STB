@@ -19,6 +19,7 @@ A simple Telegram bot demonstrtes core features which is powered by the aiogram 
  - /rag_status - check RAG AI Mode status
  - /rag_docs - list user documents uploaded for RAG AI Mode
  - /rag_doc_delete - delete document from RAG AI Mode
+ - /reset - removes user settings, chat history and uploaded documents
  - or ask whatever you like, and STB will ask Mistral LLM for you:)
 
 

@@ -98,3 +98,12 @@ class RagService:
             await self._vector_repository.delete_by_filename(user_id=user_id, filename=filename)
         except DocumentNotFoundError:
             raise
+
+    async def delete_all_documents(self, user_id: int) -> None:
+        await self._vector_repository.delete_all_documents(user_id=user_id)
+
+
+    async def delete_all(self, user_id: int) -> None:
+        await self.delete_all_documents(user_id)
+        await self._history_repository.delete(user_id)
+        await self._settings_repository.delete(user_id)

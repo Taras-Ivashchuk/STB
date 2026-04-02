@@ -3,11 +3,13 @@ from aiogram.filters import Command
 from aiogram.types import Message
 from aiogram.types import FSInputFile
 from core import settings
+from services.interfaces import ServiceInterface
 
 
 class MenuRouter:
-    def __init__(self, rag_router: Router) -> None:
+    def __init__(self, rag_router: Router, chat_service: ServiceInterface) -> None:
         self._router = Router(name="menu_router")
+        self._chat_service = chat_service
         self._register_services()
         self._router.include_router(rag_router)
 
@@ -55,6 +57,8 @@ class MenuRouter:
                 " - list user documents uploaded for RAG AI Mode\n"
                 "/rag_doc_delete filename"
                 " - delete document from RAG AI Mode\n"
+                "/reset"
+                " - remove user settings, chat history and uploaded documents \n"
 
             )
 
@@ -81,6 +85,15 @@ class MenuRouter:
 
             await message.answer_document(discount, parse_mode="HTML")
             await message.answer(text, parse_mode="HTML")
+
+        @self._router.message(Command("reset"))
+        async def reset(message: Message):
+            user_id = message.from_user.id
+
+            await self._chat_service.reset(user_id=user_id)
+            await message.answer(
+                "User settings, user history and user documents succesfuly deleted! RAG mode is disabled"
+            )
 
     def get_router(self) -> Router:
         return self._router

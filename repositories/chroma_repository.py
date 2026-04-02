@@ -77,3 +77,6 @@ class ChromaRepository:
         result = await self._collection.get(where={"user_id": user_id})
 
         return len(result.get("documents", []))
+
+    async def delete_all_documents(self, user_id: int) -> None:
+        await self._collection.delete(where={"user_id": user_id})

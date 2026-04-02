@@ -9,6 +9,9 @@ class ServiceInterface(Protocol):
     async def handle(self, user_id: int, msg: Any) -> AgentResponse:
         """Handle user message with AI Agent"""
 
+    async def reset(self, user_id: int) -> None:
+        """Reset user settings, remove history and uploaded documents"""
+
 
 class RagServiceInterface(Protocol):
     """Rag Service for AI Agent"""
@@ -31,5 +34,8 @@ class RagServiceInterface(Protocol):
     async def count_documents(self, user_id: int) -> int:
         """Count the documents that were uploaded by user"""
 
-    async def delete_by_filename(self, user_id: int, filename: str) -> None:
-        """Delete the document from vector database by document filename"""
+    async def delete_all_documents(self, user_id: int) -> None:
+        """Delete all user documents"""
+
+    async def delete_all(self, user_id: int) -> None:
+        """Delete all user documents, all user settings and all user history"""
