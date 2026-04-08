@@ -33,14 +33,12 @@ class TestRedisRepository:
     @pytest.fixture(scope="class")
     def redis_client(self):  # runs only once
         yield FakeAsyncRedis()
-        print("redis client destroyed")
 
     @pytest.fixture(scope="class")  # runs only once
     def repo(self, redis_client):
         repo = RedisRepository(redis_client=redis_client, prefix=self.prefix)
 
         yield repo
-        print("redis repo destroyed")
 
     @pytest.mark.asyncio
     async def test_repo_save(self, repo, redis_client):

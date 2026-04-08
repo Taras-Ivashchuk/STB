@@ -27,7 +27,6 @@ class TestRagService:
             history_repository=mock_history_repository,
             agent=mock_agent
         )
-        print("Rag service destroyed")
 
     @pytest.mark.asyncio
     async def test_get_status(self, rag_service):

@@ -22,19 +22,13 @@ class TestChromaRepository:
                 port=config["port"]
             )
 
-            print("chroma client destroyed")
-
     @pytest.fixture(scope="class")
     async def chroma_collection(self, chroma_container):
         yield await chroma_container.get_or_create_collection(name=self.collection_name)
 
-        print("chroma collection destroyed")
-
     @pytest.fixture(scope="class")
     async def chroma_repo(self, chroma_container, chroma_collection):
         yield ChromaRepository(db=chroma_container, collection=chroma_collection)
-
-        print("chroma repository destroyed")
 
     @pytest.mark.asyncio
     async def test_chroma_add_document(self, chroma_repo, chroma_collection):
@@ -80,7 +74,6 @@ class TestChromaRepository:
         await chroma_collection.add(ids=ids, documents=faux_pdf_result.sentences, metadatas=metadatas)
 
         actual = await chroma_repo.search(user_id=user_id, question=expected_chunk, n_results=1)
-        print("*" * 20, actual)
 
         assert actual["documents"][0][0] == expected_chunk
 
@@ -117,8 +110,6 @@ class TestChromaRepository:
             n_results=1,
             where={"user_id": user_id}
         )
-
-        print("*" * 20, actual)
 
         actual_chunk = actual["documents"][0]
         actual_filename = actual["metadatas"][0]

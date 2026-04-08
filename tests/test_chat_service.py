@@ -20,8 +20,6 @@ class TestChatService:
             rag_service=mock_rag_service
         )
 
-        print("chat service destroyed")
-
     @pytest.mark.asyncio
     async def test_handle_is_not_rag(self, chat_service):
         """Should return lax agent response"""
