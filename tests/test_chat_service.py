@@ -56,6 +56,7 @@ class TestChatService:
         chat_service._rag_service.query.return_value = faux_agent_response
         user_id = 1
         message = "How are you!"
+        chat_service._rag_service.get_status.return_value = True
         results_number = 20
 
         response = await chat_service.handle(
